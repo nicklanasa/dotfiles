@@ -1,0 +1,330 @@
+;; Answering just 'y' or 'n' will do
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq-default indent-tabs-mode nil)
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(global-hl-line-mode -1)
+(show-paren-mode t)
+(recentf-mode 1)
+
+(setq make-backup-files nil)
+(setq auto-save-default t)
+(setq history-length 25)
+(setq python-indent 4)
+(savehist-mode 1)
+(save-place-mode 1)
+
+;; Packages
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+(package-install 'use-package)
+(package-refresh-contents)
+
+;; org-roam
+
+(use-package org-roam
+  :ensure t
+  :bind
+  (("C-c r c" . org-roam-capture)
+   ("C-c r i" . org-roam-node-insert)
+   ("C-c r f" . org-roam-node-find))
+  :config
+  ;; to all spaces in node title
+  (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
+  (setq org-roam-directory (file-truename "~/Documents/notes"))
+  (setq org-roam-capture-templates '(("d" "default" plain "%?"
+                                      :target
+                                      (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                         "#+title: ${title}\n")
+                                      :unnarrowed t)
+                                     ("r" "bibliography reference" plain
+                                      "%?"
+                                      :target
+                                      (file+head
+                                       "references/${citekey}.org"
+                                       "#+title: ${title}\n")
+                                      :unnarrowed t)))
+  (org-roam-db-autosync-mode t))
+
+(use-package org-roam-ui
+  :ensure t
+  :after org-roam
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+
+(use-package org-ref
+  :ensure t
+  :config
+  (setq
+   bibtex-completion-bibliography '("~/Documents/Zotero/bibtex.bib")
+   bibtex-completion-notes-path "~/Documents/notes/references"
+   bibtex-completion-pdf-field "file"
+   bibtex-completion-pdf-open-function
+   (lambda (fpath)
+     (call-process "open" nil 0 nil fpath))))
+
+(use-package ivy-bibtex
+  :ensure t
+  :after org-ref)
+
+(use-package org-roam-bibtex
+  :ensure t
+  :after org-roam
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (require 'org-ref))
+
+;; org-roam
+
+;; org
+
+(use-package org-chef :ensure t)
+
+(use-package org-mac-link :ensure t)
+
+(setq org-src-window-setup 'current-window
+      org-return-follows-link t
+      org-babel-load-languages '((shell .t)
+                                 (emacs-lisp . t)
+                                 (python . t)
+                                 (Javascript . t))
+      org-confirm-babel-evaluate nil
+      org-use-speed-commands t)
+
+(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+        (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
+
+(setq org-agenda-include-diary t)
+(setq org-agenda-tags-column 125)
+(setq org-deadline-warning-days 30)
+
+(setq org-capture-templates
+      '(("t" "Todo" entry (file "~/Documents/gtd/inbox.org")
+         "* TODO %?\n  %i\n  %a")
+        ("r" "Weekly Review" entry (file "~/Documents/gtd/reviews.org")
+               (file "~/Documents/gtd/templates/weeklyreviewtemplate.org"))
+        ("l" "Ledger transaction" plain
+         (file "~/Documents/ledger/2023.ledger")
+         "%(org-read-date) * %^{Description}
+ %^{Category|Expenses:Food:Groceries|Expenses:Food:Eating Out|Expenses:Household}
+ %^{Account|Assets:Bank:Checking|Income:Cash}  -$%^{Amount}"
+         :empty-lines 1)
+        ("c" "Cookbook" entry (file "~/Documents/cookbook.org")
+         "%(org-chef-get-recipe-from-url)"
+         :empty-lines 1)))
+
+(setq org-agenda-files (list
+                        "~/Documents/gtd/inbox.org"
+                        "~/Documents/gtd/projects.org"
+                        "~/Documents/gtd/repeaters.org"))
+
+(global-set-key (kbd "C-c c") #'org-capture)
+(global-set-key (kbd "C-c a") #'org-agenda)
+
+(setq org-tag-alist '(("nicklanasa" . ?n)
+                      ("work" . ?w)))
+
+(setq org-agenda-custom-commands
+      '((" " "Agenda"
+         ((agenda ""
+                  ((org-agenda-span 'day)))
+          (todo "TODO"
+                ((org-agenda-overriding-header "Unscheduled tasks")
+                 (org-agenda-files '("~/Documents/gtd/inbox.org"))
+                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
+                 ))
+          (todo "TODO"
+                ((org-agenda-overriding-header "Unscheduled project tasks")
+                 (org-agenda-files '("~/Documents/gtd/projects.org"))
+                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
+
+(defmacro func-ignore (fnc)
+  "Return function that ignores its arguments and invokes FNC."
+  `(lambda (&rest _rest)
+     (funcall ,fnc)))
+
+;; save all org-buffers when todo state changes
+(advice-add 'org-deadline       :after (func-ignore #'org-save-all-org-buffers))
+(advice-add 'org-schedule       :after (func-ignore #'org-save-all-org-buffers))
+(advice-add 'org-store-log-note :after (func-ignore #'org-save-all-org-buffers))
+(advice-add 'org-todo           :after (func-ignore #'org-save-all-org-buffers))
+
+(add-hook 'org-mode-hook 'visual-line-mode)
+
+;; end org
+
+(use-package company
+  :ensure t
+  :after lsp-mode
+  :hook (prog-mode . company-mode)
+  :bind (:map company-active-map
+              ("<tab>" . company-complete-selection))
+  (:map lsp-mode-map
+        ("<tab>" . company-indent-or-complete-common))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0))
+
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
+
+(use-package git-gutter
+  :ensure t
+  :config
+  (global-git-gutter-mode +1)
+  (custom-set-variables
+   '(git-gutter:update-interval 2)
+   '(git-gutter:window-width 2)))
+
+(use-package tree-sitter
+  :ensure t)
+
+(use-package tree-sitter-langs :ensure t)
+
+(use-package ledger-mode
+  :ensure t
+  :config
+  (setq ledger-default-date-format ledger-iso-date-format)
+  (add-to-list 'auto-mode-alist '("\\.ledger\\'" . ledger-mode))
+  (add-hook 'ledger-mode-hook 'company-mode))
+
+(use-package smex
+  :ensure t
+  :config
+  (smex-initialize)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands))
+
+(use-package ido-vertical-mode
+  :ensure t
+  :init
+  (require 'ido)
+  (ido-mode t)
+  (setq ido-enable-prefix nil
+        ido-enable-flex-matching t
+        ido-case-fold nil
+        ido-auto-merge-work-directories-length -1
+        ido-create-new-buffer 'always
+        ido-use-filename-at-point nil
+        ido-max-prospects 10)
+
+  (require 'ido-vertical-mode)
+  (ido-vertical-mode)
+
+  (require 'dash)
+
+  (defun my/ido-go-straight-home ()
+    (interactive)
+    (cond
+     ((looking-back "~/") (insert "Developer/"))
+     ((looking-back "/") (insert "~/"))
+     (:else (call-interactively 'self-insert-command))))
+
+  (defun my/setup-ido ()
+    ;; Go straight home
+    (define-key ido-file-completion-map (kbd "~") 'my/ido-go-straight-home)
+    (define-key ido-file-completion-map (kbd "C-~") 'my/ido-go-straight-home))
+
+  (add-hook 'ido-setup-hook 'my/setup-ido)
+  (add-to-list 'ido-ignore-directories "node_modules"))
+
+(use-package paredit :ensure t)
+(use-package ivy :ensure t)
+(use-package hydra :ensure t)
+(use-package json-mode :ensure t)
+(use-package markdown-mode :ensure t)
+(use-package yaml-mode :ensure t)
+(use-package typescript-mode :ensure t)
+
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
+
+(use-package magit
+  :bind ("C-x g" . magit-status)
+  :ensure t
+  :config
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status))
+
+(use-package lsp-ui
+  :ensure t
+  :config
+  (setq lsp-ui-doc-frame-mode t
+        lsp-ui-doc-enable t
+        lsp-ui-doc-position 'bottom
+        lsp-ui-sideline-enable nil
+        lsp-ui-sideline-show-hover nil))
+
+(global-set-key (kbd "C-c C-r") 'recentf-open-files)
+
+;; multiple cursors
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c M-a") 'mc/mark-all-like-this)
+
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+
+(add-hook 'html-mode-hook #'lsp)
+(add-hook 'html-mode-hook #'company-mode)
+(add-hook 'python-mode-hook #'lsp)
+(add-hook 'python-mode-hook #'company-mode)
+(add-hook 'js-mode-hook #'lsp)
+(add-hook 'js-mode-hook #'company-mode)
+(add-hook 'js-mode-hook #'tree-sitter-hl-mode)
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'tree-sitter-hl-mode)
+
+
+(if (string= (system-name) "Nickolass-Air")
+    (load "~/dotfiles/chatgpt.el"))
+
+(with-eval-after-load 'lsp-mode
+  (setq lsp-modeline-diagnostics-enable t)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      create-lockfiles nil) ;; lock files will kill `npm start'
+
+(add-to-list 'custom-theme-load-path
+             (file-name-as-directory
+              (expand-file-name "~/dotfiles/emacs-color-theme-solarized")))
+(load-theme 'solarized t)
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (solarized-update-background-mode
+             (if (display-graphic-p frame) 'light 'dark)
+             (list frame))))
+
+(with-eval-after-load 'js
+  (setq js-indent-level 2)
+  (define-key js-mode-map (kbd "M-.") nil))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("55c81b8ddb2b6c3fa502b1ff79fa8fed6affe362447d5e72388c7d160a2879d0" default))
+ '(git-gutter:update-interval 2)
+ '(git-gutter:window-width 2)
+ '(package-selected-packages
+   '(lsp-ui-doc company-box git-gutter tree-sitter-langs tree-sitter emacs-color-theme-solarized yasnippet yaml-mode which-key use-package typescript-mode smex rjsx-mode restclient pug-mode projectile paredit org-roam-ui org-roam-bibtex org-ref org-mac-link org-chef multiple-cursors magit lsp-ui ledger-mode json-mode ivy-bibtex ido-vertical-mode flycheck elfeed-org eglot dracula-theme dashboard company)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

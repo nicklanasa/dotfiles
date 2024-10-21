@@ -1,0 +1,13 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_THEME="robbyrussell"
+
+plugins=(git)
+
+alias e="emacs -nw"
+# alias git="git.exe" if using repo in windows, prevents indexing
+
+source $ZSH/oh-my-zsh.sh
