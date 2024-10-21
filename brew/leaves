@@ -1,0 +1,11 @@
+gcc
+libtool
+node
+openvpn
+postgresql
+telnet
+tmux
+vim
+wget
+cmake
+anomalyco/tap/opencode
