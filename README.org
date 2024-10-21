@@ -1,0 +1,31 @@
+* Setup
+
+#+begin_src sh
+brew tap d12frosted/emacs-plus
+brew install emacs-plus  --with-c9rgreen-sonoma-icon
+xargs brew install < leaves
+xargs brew install --cask < casks
+
+ln -s ~/dotfiles/.config/doom ~/.doom.d
+git clone https://github.com/hlissner/doom-emacs ~/.config/emacs
+~/.config/emacs/bin/doom install
+
+# install oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+ln -s ~/dotfiles/.zshrc ~/.zshrc
+ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
+
+# claude code
+npm i -g @anthropic-ai/claude-code
+#+end_src
+
+After opening Finder, double click the Double-Click to Install Azul Zulu JDK 17.pkg package to install the JDK.
+
+Install the following in Android Studio:
+
+1. Android 15
+2. Android SDK Platform 35
+3. Google APIs ARM 64 v8a System Image
+
+In "SDK Tools" check the box next to "Show Package Details" -> "Android SDK Build-Tools" entry, then make sure that 35.0.0 is selected.
