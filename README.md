@@ -18,7 +18,13 @@ git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
 ~/.emacs.d/bin/doom install
 ```
 
-4. Setup fish and fonts
+4. Set fish to $SHELL var in default shell config
+
+```
+export SHELL=/opt/homebrew/bin/fish
+```
+
+5. Setup fish and fonts
 
 append fish shell to: /etc/shells, install fisher, tide, monaco nerd fonts by double clicking
 ```
