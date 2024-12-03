@@ -9,7 +9,6 @@
       ns-use-proxy-icon nil
       frame-title-format nil
       doom-theme 'doom-solarized-dark-high-contrast
-      doom-font (font-spec :family "Consolas" :size 16)
       gptel-model "llama3.1:8b"
       explicit-shell-file-name "/bin/zsh"
       gptel-backend (gptel-make-ollama "Ollama"
@@ -144,6 +143,7 @@
 (let ((sys (system-name)))
   (cond
    ((string-prefix-p "Nicks-MacBook-Pro.local" sys)
+    (setq doom-font (font-spec :family "Consolas" :size 16))
     (after! doom-ui
       ;; set your favorite themes
       (setq custom-safe-themes t)
