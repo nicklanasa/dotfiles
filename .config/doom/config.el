@@ -52,12 +52,6 @@
          "* TODO %?\n  %i\n  %a")
         ("w" "Weekly Review" entry (file+datetree "~/Documents/org/reviews.org")
          (file "~/Documents/org/templates/weeklyreviewtemplate.org"))
-        ("l" "Ledger transaction" plain
-         (file "~/Documents/ledger/2024.ledger")
-         "%(org-read-date) %^{Description}
- %^{Category|Expenses:Food:Groceries|Expenses:Food:Eating Out|Expenses:Household|Expenses:Subscriptions}
- %^{Account|Assets:Checking|Income:Cash}  -$%^{Amount}"
-         :empty-lines 1)
         ("c" "Cookbook" entry (file (lambda () (expand-file-name "cookbook.org" org-directory)))
          "%(org-chef-get-recipe-from-url)"
          :empty-lines 1)))
@@ -112,7 +106,6 @@
 
 ;; ledger
 (after! ledger
-  (setq ledger-default-date-format ledger-iso-date-format)
   (setq ledger-reports
         '(("bud" "%(binary) -f %(ledger-file) reg --budget --monthly ^expenses")
           ("unbud" "%(binary) -f %(ledger-file) reg --unbudgeted --monthly ^expenses")
