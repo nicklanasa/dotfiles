@@ -9,7 +9,7 @@
       ns-use-proxy-icon nil
       frame-title-format nil
       doom-theme 'doom-solarized-dark-high-contrast
-      doom-font (font-spec :family "Consolas" :size 18)
+      doom-font (font-spec :family "Consolas" :size 16)
       explicit-shell-file-name "/bin/zsh")
 
 ;; set env
@@ -25,10 +25,6 @@
   (add-to-list 'default-frame-alist '(alpha . (95 . 95))))
 
 ;; org-mode
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-        (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
-
 (setq org-directory
       (let ((sys (system-name)))
         (cond
@@ -45,17 +41,19 @@
 
 (setq org-tag-alist '(("@home" . ?h)
                       ("@work" . ?w)))
-(setq org-deadline-warning-days 10
+
+(setq org-deadline-warning-days 14
       org-agenda-start-day nil ;; start on current day
       org-confirm-babel-evaluate nil
-      org-agenda-include-diary t
       org-agenda-files (directory-files-recursively org-directory "\.org$"))
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file (lambda () (expand-file-name "todo.org" org-directory)))
          "* TODO %?\n  %i\n  %a")
+        ("w" "Weekly Review" entry (file+datetree "~/Documents/org/reviews.org")
+         (file "~/Documents/org/templates/weeklyreviewtemplate.org"))
         ("l" "Ledger transaction" plain
-         (file "~/ledger/2024.ledger")
+         (file "~/Documents/ledger/2024.ledger")
          "%(org-read-date) %^{Description}
  %^{Category|Expenses:Food:Groceries|Expenses:Food:Eating Out|Expenses:Household|Expenses:Subscriptions}
  %^{Account|Assets:Checking|Income:Cash}  -$%^{Amount}"
@@ -63,10 +61,11 @@
         ("c" "Cookbook" entry (file (lambda () (expand-file-name "cookbook.org" org-directory)))
          "%(org-chef-get-recipe-from-url)"
          :empty-lines 1)))
+
 (setq org-agenda-custom-commands
       '((" " "Agenda"
          ((agenda ""
-                  ((org-agenda-span 'week)))
+                  ((org-agenda-span 'day)))
           (todo "TODO"
                 ((org-agenda-overriding-header "Unscheduled tasks")
                  (org-agenda-files (list (expand-file-name "todo.org" org-directory)))
@@ -76,6 +75,10 @@
                 ((org-agenda-overriding-header "Unscheduled project tasks")
                  (org-agenda-files (directory-files-recursively (expand-file-name "projects" org-directory) "\.org$"))
                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+        (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
 
 ;; icloud syncing
 (defmacro func-ignore (fnc)
@@ -90,7 +93,6 @@
 (advice-add 'org-todo           :after (func-ignore #'org-save-all-org-buffers))
 
 (after! org-roam
-
   (setq org-roam-directory
         (let ((sys (system-name)))
           (cond
@@ -110,7 +112,7 @@
 
 ;; ledger
 (after! ledger
-  (setq ledger-default-date-format "%Y-%m-%d")
+  (setq ledger-default-date-format ledger-iso-date-format)
   (setq ledger-reports
         '(("bud" "%(binary) -f %(ledger-file) reg --budget --monthly ^expenses")
           ("unbud" "%(binary) -f %(ledger-file) reg --unbudgeted --monthly ^expenses")
