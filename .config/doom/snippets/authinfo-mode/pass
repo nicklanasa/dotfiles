@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: pass
-# key: pass
-# --
-machine $1 login $2 password $3

@@ -7,7 +7,7 @@ ZSH_THEME="robbyrussell"
 
 plugins=(git)
 
+source $ZSH/oh-my-zsh.sh
+
 alias e="emacs -nw"
 # alias git="git.exe" if using repo in windows, prevents indexing
-
-source $ZSH/oh-my-zsh.sh
