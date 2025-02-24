@@ -32,7 +32,7 @@
   (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
 
   (setq org-capture-templates
-        '(("t" "Todo" entry (file (lambda () (expand-file-name "todo.org" org-directory)))
+        '(("t" "Todo" entry (file (lambda () (expand-file-name "inbox.org" org-directory)))
            "* TODO %?\n  %i\n  %a")
           ("r" "Weekly Review" entry (file (lambda () (expand-file-name "reviews.org" org-directory)))
            (file (lambda () (expand-file-name "templates/weeklyreviewtemplate.org" org-directory))))
