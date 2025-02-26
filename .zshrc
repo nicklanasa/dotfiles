@@ -10,3 +10,4 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 alias e="emacs -nw"
+

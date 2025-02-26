@@ -14,6 +14,10 @@
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
 
+(after! doom-ui
+  (setq! auto-dark-themes '((doom-solarized-dark-high-contrast) (doom-solarized-light)))
+  (auto-dark-mode))
+
 (after! org
   (setq org-src-window-setup 'current-window
         org-return-follows-link t
@@ -28,7 +32,7 @@
         org-deadline-warning-days 30
         org-use-speed-commands t)
 
-  (setq org-directory "~/Documents/Org")
+  (setq org-directory "/Users/nick/Library/CloudStorage/GoogleDrive-nicklanasa@gmail.com/My Drive/Documents/Org")
   (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
 
   (setq org-capture-templates
@@ -58,16 +62,12 @@
           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 (after! org-roam
-  (setq org-roam-directory (file-truename "~/Documents/Org/roam/"))
+  (setq org-roam-directory (file-truename "/Users/nick/Library/CloudStorage/GoogleDrive-nicklanasa@gmail.com/My Drive/Documents/Org/Notes"))
   (setq org-roam-capture-templates '(("d" "default" plain "%?"
                                       :target
                                       (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                                                  "#+title: ${title}\n")
                                       :unnarrowed t))))
-
-(after! doom-ui
-  (setq! auto-dark-themes '((doom-solarized-dark-high-contrast) (doom-solarized-light)))
-  (auto-dark-mode))
 
 ;; global modes
 (global-git-gutter-mode +1)
