@@ -19,7 +19,7 @@
   )
 (unless (string-equal (system-name) "DESKTOP-T8EKE2I")
   ;; Set default font to Monaco for all other systems
-  (setq doom-font (font-spec :family "Monaco" :size 20)))
+  (setq doom-font (font-spec :family "Monaco" :size 16)))
 
 (after! org
   (setq org-src-window-setup 'current-window
