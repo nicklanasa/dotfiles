@@ -6,17 +6,20 @@
       typescript-indent-level 2
       display-line-numbers-type nil
       global-hl-line-modes nil
-      doom-font (font-spec :family "Monaco" :size 16)
-      doom-theme 'doom-solarized-dark-high-contrast
       custom-safe-themes t
+      doom-theme 'doom-solarized-dark-high-contrast
       explicit-shell-file-name "/bin/zsh")
 
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
 
-(after! doom-ui
-  (setq! auto-dark-themes '((doom-solarized-dark-high-contrast) (doom-solarized-light)))
-  (auto-dark-mode))
+(when (string-equal (system-name) "DESKTOP-T8EKE2I")
+  ;; Set font to CascadiaCode on Windows laptop
+  (setq doom-font (font-spec :family "CascadiaCode" :size 20))
+  )
+(unless (string-equal (system-name) "DESKTOP-T8EKE2I")
+  ;; Set default font to Monaco for all other systems
+  (setq doom-font (font-spec :family "Monaco" :size 20)))
 
 (after! org
   (setq org-src-window-setup 'current-window
@@ -32,7 +35,7 @@
         org-deadline-warning-days 30
         org-use-speed-commands t)
 
-  (setq org-directory "/Users/nick/Library/CloudStorage/GoogleDrive-nicklanasa@gmail.com/My Drive/Documents/Org")
+  (setq org-directory "~/Dropbox/Org")
   (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
 
   (setq org-capture-templates
@@ -62,7 +65,7 @@
           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 (after! org-roam
-  (setq org-roam-directory (file-truename "/Users/nick/Library/CloudStorage/GoogleDrive-nicklanasa@gmail.com/My Drive/Documents/Org/Notes"))
+  (setq org-roam-directory (file-truename "~/Dropbox/Org/Notes"))
   (setq org-roam-capture-templates '(("d" "default" plain "%?"
                                       :target
                                       (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
@@ -80,3 +83,5 @@
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode))
 (add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(add-hook 'auto-save-hook 'org-save-all-org-buffers)

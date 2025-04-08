@@ -7,6 +7,5 @@
 (package! gptel)
 (package! git-gutter)
 (package! restclient)
-(package! auto-dark)
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
