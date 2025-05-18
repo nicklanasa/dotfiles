@@ -19,6 +19,7 @@
        fold
        snippets
        word-wrap
+       (format +onsave)
 
        :emacs
        dired
