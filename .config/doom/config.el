@@ -1,5 +1,6 @@
 (setq make-backup-files nil
       auto-save-default t
+      auto-save-visited-interval 15 ;; save after 15s idle
       history-length 25
       python-indent 4
       js-indent-level 2
@@ -80,6 +81,9 @@
 (global-git-gutter-mode +1)
 (global-auto-revert-mode t)
 (global-visual-line-mode t)
+
+;; auto saving
+(auto-save-visited-mode 1)
 
 ;; add to lists
 (add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
