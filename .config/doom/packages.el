@@ -9,6 +9,5 @@
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
-;; org-roam ui
 (unpin! org-roam)
 (package! org-roam-ui)
