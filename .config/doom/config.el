@@ -9,7 +9,7 @@
       global-hl-line-modes nil
       custom-safe-themes t
       doom-theme 'doom-solarized-dark-high-contrast
-      doom-font (font-spec :family "Monaco" :size 16)
+      doom-font (font-spec :family "Monaco" :size 15)
       explicit-shell-file-name "/bin/zsh")
 
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
@@ -59,11 +59,41 @@
             (todo "TODO"
                   ((org-agenda-overriding-header "Unscheduled tasks")
                    (org-agenda-files (list (expand-file-name "inbox.org" org-directory)))
-                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))
             (todo "TODO"
                   ((org-agenda-overriding-header "Unscheduled project tasks")
-                   (org-agenda-files (directory-files (expand-file-name "projects" org-directory) 'full (rx ".org" eos)))
-                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
+                   (org-agenda-files
+                    (directory-files (expand-file-name "projects" org-directory)
+                                     'full (rx ".org" eos)))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+          ("w" "Watch Agenda"
+           ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-files
+                      (directory-files (expand-file-name "watch" org-directory)
+                                       'full (rx ".org" eos)))))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled watch entries")
+                   (org-agenda-files
+                    (directory-files (expand-file-name "watch" org-directory)
+                                     'full (rx ".org" eos)))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+          ("r" "Read Agenda"
+           ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-files
+                      (directory-files (expand-file-name "read" org-directory)
+                                       'full (rx ".org" eos)))))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled read entries")
+                   (org-agenda-files
+                    (directory-files (expand-file-name "read" org-directory)
+                                     'full (rx ".org" eos)))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
 
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
@@ -91,3 +121,8 @@
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode))
 (add-to-list 'auto-mode-alist '("\\.restclient\\'" . restclient-mode))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; keyboard shortcuts
+(global-set-key (kbd "<f1>") #'org-capture)
+(global-set-key (kbd "<f2>") #'org-roam-node-find)
+(global-set-key (kbd "<f3>") #'find-file)
