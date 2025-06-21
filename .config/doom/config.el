@@ -18,6 +18,36 @@
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
 
+;; (after! eldoc-box
+;;   ;; Enable popup docs in emacs-lisp-mode
+;;   (add-hook 'emacs-lisp-mode-hook #'eldoc-box-hover-at-point-mode)
+
+;;   ;; Optional: enable in other Lisp modes
+;;   (add-hook 'lisp-interaction-mode-hook #'eldoc-box-hover-mode)
+
+;;   ;; Popup appearance/settings
+;;   (setq eldoc-box-clear-with-C-g t
+;;         eldoc-box-max-pixel-width 500
+;;         eldoc-box-position-function #'eldoc-box--default-at-point-position-function))
+
+(after! gptel
+  (setq gptel-model 'deepseek-coder:33b
+        gptel-backend (gptel-make-ollama "Ollama"
+                        :host "localhost:11434"
+                        :stream t
+                        :models '(deepseek-coder:33b))
+        gptel-save-transcripts t
+        gptel-transcript-directory "~/Documents/org/gptel/sessions"))
+
+(after! lsp-ui
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-doc-use-childframe nil
+        lsp-ui-doc-show-with-cursor t
+        lsp-ui-doc-show-with-mouse nil
+        lsp-ui-doc-delay 0.2
+        lsp-ui-doc-position 'at-point)
+  (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
+
 (after! org
   (setq org-src-window-setup 'current-window
         org-return-follows-link t
