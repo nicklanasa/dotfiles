@@ -8,8 +8,8 @@
       display-line-numbers-type nil
       global-hl-line-modes nil
       custom-safe-themes t
-      doom-theme 'doom-solarized-dark-high-contrast
-      doom-font (font-spec :family "Monaco" :size 15)
+      doom-theme 'doom-city-lights
+      doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 12)
       explicit-shell-file-name "/bin/zsh")
 
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
