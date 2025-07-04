@@ -28,103 +28,105 @@
   (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
 
 ;; org mode
-(setq org-directory "~/Dropbox/org"
-      org-agenda-files (list
-                        (expand-file-name "inbox.org" org-directory)
-                        (expand-file-name "projects" org-directory)
-                        (expand-file-name "books" org-directory))
-      org-default-notes-file (expand-file-name "inbox.org" org-directory))
+(after! org
+  (setq org-directory "~/Dropbox/org"
+        org-agenda-files (list
+                          (expand-file-name "inbox.org" org-directory)
+                          (expand-file-name "repeaters.org" org-directory)
+                          (expand-file-name "projects" org-directory)
+                          (expand-file-name "books" org-directory))
+        org-default-notes-file (expand-file-name "inbox.org" org-directory))
 
-;; Task keywords and logging
-(setq org-log-done 'time
-      org-log-into-drawer t
+  ;; Task keywords and logging
+  (setq org-log-done 'time
+        org-log-into-drawer t
 
-      org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-        (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))
+        org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+          (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))
 
-      org-todo-keyword-faces
-      '(("NEXT" . +org-todo-active)
-        ("WAITING" . +org-todo-onhold)
-        ("HOLD" . +org-todo-onhold)
-        ("CANCELLED" . +org-todo-cancel)))
+        org-todo-keyword-faces
+        '(("NEXT" . +org-todo-active)
+          ("WAITING" . +org-todo-onhold)
+          ("HOLD" . +org-todo-onhold)
+          ("CANCELLED" . +org-todo-cancel)))
 
-;; Agenda
-(setq org-agenda-span 'day
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "+0d"
-      org-deadline-warning-days 7
-      org-agenda-skip-deadline-if-done t
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-tags-todo-honor-ignore-options t)
+  ;; Agenda
+  (setq org-agenda-span 'day
+        org-agenda-start-on-weekday nil
+        org-agenda-start-day "+0d"
+        org-deadline-warning-days 30
+        org-agenda-skip-deadline-if-done t
+        org-agenda-skip-scheduled-if-done t
+        org-agenda-tags-todo-honor-ignore-options t)
 
-;; Refile
-(setq org-refile-targets '((nil :maxlevel . 3)
-                           (org-agenda-files :maxlevel . 3))
-      org-outline-path-complete-in-steps nil
-      org-refile-use-outline-path t)
+  ;; Refile
+  (setq org-refile-targets '((nil :maxlevel . 3)
+                             (org-agenda-files :maxlevel . 3))
+        org-outline-path-complete-in-steps nil
+        org-refile-use-outline-path t)
 
-;; Capture Templates
-(setq org-capture-templates
-      `(
-        ("i" "Inbox" entry
-         (file ,(expand-file-name "inbox.org" org-directory))
-         "* TODO %?\n%U\n")
+  ;; Capture Templates
+  (setq org-capture-templates
+        `(
+          ("i" "Inbox" entry
+           (file ,(expand-file-name "inbox.org" org-directory))
+           "* TODO %?\n%U\n")
 
-        ("b" "Book to Read" entry
-         (file+headline ,(expand-file-name "books/inbox.org" org-directory) "Books")
-         "* TODO %?  :book:\n%U\n")
+          ("b" "Book to Read" entry
+           (file+headline ,(expand-file-name "books/inbox.org" org-directory) "Books")
+           "* TODO %?  :book:\n%U\n")
 
-        ("p" "Project Task" entry
-         (function
-          (lambda () (read-file-name "Select project file: "
-                                     (expand-file-name "projects/" org-directory))))
-         "* TODO %?\n%U\n")
+          ("p" "Project Task" entry
+           (function
+            (lambda () (read-file-name "Select project file: "
+                                       (expand-file-name "projects/" org-directory))))
+           "* TODO %?\n%U\n")
 
-        ("n" "Note" entry
-         (file ,(expand-file-name "notes.org" org-directory))
-         "* %? :note:\n%U\n")))
+          ("n" "Note" entry
+           (file ,(expand-file-name "notes.org" org-directory))
+           "* %? :note:\n%U\n")))
 
-;; Tag alignment and groups
-(setq org-tags-column 0
-      org-tag-alist
-      '((:startgroup)
-        ("@work" . ?w)
-        ("@home" . ?h)
-        (:endgroup)
-        ("urgent" . ?u)
-        ("deep" . ?d)
-        ("book" . ?b)))
+  ;; Tag alignment and groups
+  (setq org-tags-column 0
+        org-tag-alist
+        '((:startgroup)
+          ("@work" . ?w)
+          ("@home" . ?h)
+          (:endgroup)
+          ("urgent" . ?u)
+          ("deep" . ?d)
+          ("book" . ?b)))
 
-;; Visuals
-(setq org-hide-emphasis-markers t
-      org-ellipsis " ▾ "
-      org-pretty-entities t
-      org-fontify-done-headline t
-      org-fontify-quote-and-verse-blocks t
-      org-image-actual-width '(300))
+  ;; Visuals
+  (setq org-hide-emphasis-markers t
+        org-ellipsis " ▾ "
+        org-pretty-entities t
+        org-fontify-done-headline t
+        org-fontify-quote-and-verse-blocks t
+        org-image-actual-width '(300))
 
-(setq org-agenda-custom-commands
-      '((" " "Agenda"
-         ((agenda ""
-                  ((org-agenda-span 'day)))
-          (todo "TODO"
-                ((org-agenda-overriding-header "Unscheduled tasks")
-                 (org-agenda-files (list (expand-file-name "inbox.org" org-directory)))
-                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-          (todo "TODO"
-                ((org-agenda-overriding-header "Unscheduled project tasks")
-                 (org-agenda-files (directory-files (expand-file-name "projects" org-directory) 'full (rx ".org" eos)))
-                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+  (setq org-agenda-custom-commands
+        '((" " "Agenda"
+           ((agenda ""
+                    ((org-agenda-span 'day)))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled tasks")
+                   (org-agenda-files (list (expand-file-name "inbox.org" org-directory) (expand-file-name "repeaters.org" org-directory)))
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled project tasks")
+                   (org-agenda-files (directory-files (expand-file-name "projects" org-directory) 'full (rx ".org" eos)))
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
 
-        ("b" "Books Agenda"
-         ((agenda ""
-                  ((org-agenda-span 'day)
-                   (org-agenda-files (directory-files (expand-file-name "books" org-directory) 'full (rx ".org" eos)))))
-          (todo "TODO"
-                ((org-agenda-overriding-header "Unscheduled book entries")
-                 (org-agenda-files (directory-files (expand-file-name "books" org-directory) 'full (rx ".org" eos)))
-                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
+          ("b" "Books Agenda"
+           ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-files (directory-files (expand-file-name "books" org-directory) 'full (rx ".org" eos)))))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled book entries")
+                   (org-agenda-files (directory-files (expand-file-name "books" org-directory) 'full (rx ".org" eos)))
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline)))))))))
 
 (after! org-roam
   (setq org-roam-directory (file-truename "~/Dropbox/org/roam")
