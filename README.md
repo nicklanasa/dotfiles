@@ -1,6 +1,11 @@
 # Dotfiles Setup
 
-## 1. Install Omarchy
+## 1. Install Omarchy and nvidia drivers
+
+```sh
+sudo pacman -R nvidia nvidia-utils nvidia-settings lib32-nvidia-utils
+sudo pacman -S nvidia-open-dkms
+```
 
 ## 2. Symlink Config Files
 
