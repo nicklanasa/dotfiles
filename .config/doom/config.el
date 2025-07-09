@@ -9,8 +9,13 @@
       global-hl-line-modes nil
       custom-safe-themes t
       doom-theme 'doom-tokyo-night
-      doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14)
       explicit-shell-file-name "/bin/zsh")
+
+(cond
+ ((string= system-name "Mac")
+  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18))) ; adjust font and size as needed
+ (t
+  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14))))
 
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
 (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
