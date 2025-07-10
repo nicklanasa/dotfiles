@@ -13,7 +13,7 @@
 
 (cond
  ((string= system-name "Mac")
-  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18))) ; adjust font and size as needed
+  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 20)))
  (t
   (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14))))
 
@@ -47,7 +47,7 @@
         org-deadline-warning-days 30
         org-use-speed-commands t)
 
-  (setq org-directory "~/org")
+  (setq org-directory "~/Documents/org")
   (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
 
   ;; then add project files
@@ -115,7 +115,7 @@
           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 (after! org-roam
-  (setq org-roam-directory (file-truename "~/org/roam/"))
+  (setq org-roam-directory (file-truename "~/Documents/org/roam/"))
   (setq org-roam-capture-templates '(("d" "default" plain "%?"
                                       :target
                                       (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
