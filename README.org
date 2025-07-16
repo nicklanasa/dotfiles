@@ -57,20 +57,3 @@ export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/binutils/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/binutils/include"
 #+end_src
-
-* Arch setup
-
-1. Install emacs-wayland
-2. Symlink hypr
-
-#+begin_src sh
-ln /home/nick/dotfiles/.config/hypr ~/.config/
-#+end_src
-
-3. Symlink doom
-
-#+begin_src sh
-ln /home/nick/dotfiles/.config/doom ~/.doom.d
-#+end_src
-
-4. Install doom emacs
