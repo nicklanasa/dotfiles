@@ -25,6 +25,13 @@ brew reinstall emacs-plus \
   --with-c9rgreen-sonoma-icon
 #+end_src
 
+#+begin_src sh
+cd ~
+ln -s dotfiles/.config/doom .doom.d 
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+~/.config/emacs/bin/doom install
+#+end_src
+
 ** Zsh Completions
 
 Installed to: /opt/homebrew/share/zsh/site-functions

@@ -27,7 +27,10 @@
         lsp-ui-doc-position 'at-point)
   (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
 
-;; org
+(after! doom-ui
+  (setq! auto-dark-themes '((doom-solarized-dark-high-contrast) (doom-solarized-light)))
+  (auto-dark-mode))
+
 ;; global modes
 (global-git-gutter-mode +1)
 (global-auto-revert-mode t)
@@ -44,6 +47,4 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; keyboard shortcuts
-(global-set-key (kbd "<f1>") #'org-capture)
-(global-set-key (kbd "<f2>") #'org-roam-node-find)
-(global-set-key (kbd "<f3>") #'find-file)
+(global-set-key (kbd "<f1>") #'find-file)
