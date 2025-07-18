@@ -25,35 +25,6 @@ brew reinstall emacs-plus \
   --with-c9rgreen-sonoma-icon
 #+end_src
 
-4. Start Services
-
-#+begin_src sh
-# OpenVPN
-sudo brew services start openvpn
-# Or run manually:
-# /opt/homebrew/opt/openvpn/sbin/openvpn --config /opt/homebrew/etc/openvpn/openvpn.conf
-
-# PostgreSQL 14
-brew services start postgresql@14
-# Or run manually:
-# /opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14
-
-# Emacs (optional daemon)
-brew services start emacs
-# Or run manually:
-# /opt/homebrew/opt/emacs/bin/emacs --fg-daemon
-#+end_src
-
 ** Zsh Completions
 
 Installed to: /opt/homebrew/share/zsh/site-functions
-
-** Binutils (Keg-Only)
-
-Add to .zshrc if needed:
-
-#+begin_src sh
-export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/binutils/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/binutils/include"
-#+end_src
