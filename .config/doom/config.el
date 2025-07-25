@@ -18,6 +18,95 @@
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
 
+
+;; org
+(after! org
+  (setq org-src-window-setup 'current-window
+        org-return-follows-link t
+        org-babel-load-languages '((shell .t)
+                                   (emacs-lisp . t)
+                                   (python . t))
+        org-confirm-babel-evaluate nil
+        org-refile-targets '((org-agenda-files :maxlevel . 3))
+        org-agenda-include-diary t
+        org-agenda-tags-column 75
+        org-agenda-start-day nil
+        org-deadline-warning-days 30
+        org-use-speed-commands t)
+
+  (setq org-directory "~/Documents/org")
+  (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
+
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file (lambda () (expand-file-name "inbox.org" org-directory)))
+           "* TODO %?\n  %i\n  %a")
+          ("e" "Event" entry (file (lambda () (expand-file-name "calendar.org" org-directory)))
+           "* %^{Title} %^T\n")
+          ("r" "Weekly Review" entry (file (lambda () (expand-file-name "reviews.org" org-directory)))
+           (file (lambda () (expand-file-name "templates/weeklyreviewtemplate.org" org-directory))))
+          ("c" "Cookbook" entry (file (lambda () (expand-file-name "cookbook.org" org-directory)))
+           "%(org-chef-get-recipe-from-url)"
+           :empty-lines 1)))
+
+  (setq org-agenda-custom-commands
+        '((" " "Agenda"
+           ((agenda ""
+                    ((org-agenda-span 'day)))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled tasks")
+                   (org-agenda-files (list (expand-file-name "inbox.org" org-directory)))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled project tasks")
+                   (org-agenda-files (list (expand-file-name "projects.org" org-directory)))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+          ("w" "Watch Agenda"
+           ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-files
+                      (directory-files (expand-file-name "watch" org-directory)
+                                       'full (rx ".org" eos)))))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled watch entries")
+                   (org-agenda-files
+                    (directory-files (expand-file-name "watch" org-directory)
+                                     'full (rx ".org" eos)))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+          ("r" "Read Agenda"
+           ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-files
+                      (directory-files (expand-file-name "read" org-directory)
+                                       'full (rx ".org" eos)))))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "Unscheduled read entries")
+                   (org-agenda-files
+                    (directory-files (expand-file-name "read" org-directory)
+                                     'full (rx ".org" eos)))
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
+
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+          (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+
+(after! org-roam
+  (setq org-roam-directory (file-truename "~/Documents/org/roam/"))
+  (setq org-roam-capture-templates '(("d" "default" plain "%?"
+                                      :target
+                                      (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                 "#+title: ${title}\n")
+                                      :unnarrowed t)
+                                     ("b" "book" plain
+                                      "* Metadata\n:PROPERTIES:\n:AUTHOR: %^{Author}\n:PUBLISHED: %^{Year}\n:ISBN: %^{ISBN}\n:END:\n\n"
+                                      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                         "#+title: ${title}\n#+filetags: :book:\n")
+                                      :unnarrowed t)
+                                     )))
+
 (after! lsp-ui
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-use-childframe t
