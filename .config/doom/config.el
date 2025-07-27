@@ -8,16 +8,32 @@
       display-line-numbers-type nil
       global-hl-line-modes nil
       custom-safe-themes t
-      doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14)
       doom-theme 'doom-solarized-dark-high-contrast
       explicit-shell-file-name "/bin/zsh")
 
-(set-frame-parameter (selected-frame) 'alpha '(95 . 95))
-(add-to-list 'default-frame-alist '(alpha . (95 . 95)))
+(cond
+ ((string= system-name "Mac")
+  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18))) ; adjust font and size as needed
+ (t
+  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14))))
+
+(set-face-background 'vertical-border "#002b36")
+(set-face-foreground 'vertical-border "#62787f")
+
+(setq window-divider-default-right-width 1)
+(window-divider-mode 1)
 
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
 
+(after! lsp-ui
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-doc-use-childframe nil
+        lsp-ui-doc-show-with-cursor t
+        lsp-ui-doc-show-with-mouse nil
+        lsp-ui-doc-delay 0.2
+        lsp-ui-doc-position 'at-point)
+  (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
 
 ;; org
 (after! org
@@ -29,13 +45,19 @@
         org-confirm-babel-evaluate nil
         org-refile-targets '((org-agenda-files :maxlevel . 3))
         org-agenda-include-diary t
-        org-agenda-tags-column 75
+        org-agenda-tags-column 125
         org-agenda-start-day nil
         org-deadline-warning-days 30
         org-use-speed-commands t)
 
-  (setq org-directory "~/Documents/org")
+  (setq org-directory "~/Dropbox/org")
   (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
+
+  ;; then add project files
+  (let* ((projects-dir (expand-file-name "projects" org-directory))
+         (project-files (directory-files projects-dir 'full (rx ".org" eos))))
+    (setq org-agenda-files
+          (append org-agenda-files project-files)))
 
   (setq org-capture-templates
         '(("t" "Todo" entry (file (lambda () (expand-file-name "inbox.org" org-directory)))
@@ -54,12 +76,14 @@
                     ((org-agenda-span 'day)))
             (todo "TODO"
                   ((org-agenda-overriding-header "Unscheduled tasks")
-                   (org-agenda-files (list (expand-file-name "inbox.org" org-directory)))
+                   (org-agenda-files (list (expand-file-name "inbox.org" org-directory) (expand-file-name "phone.org" org-directory)))
                    (org-agenda-skip-function
                     '(org-agenda-skip-entry-if 'scheduled 'deadline))))
             (todo "TODO"
                   ((org-agenda-overriding-header "Unscheduled project tasks")
-                   (org-agenda-files (list (expand-file-name "projects.org" org-directory)))
+                   (org-agenda-files
+                    (directory-files (expand-file-name "projects" org-directory)
+                                     'full (rx ".org" eos)))
                    (org-agenda-skip-function
                     '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
           ("w" "Watch Agenda"
@@ -94,31 +118,12 @@
           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
 (after! org-roam
-  (setq org-roam-directory (file-truename "~/Documents/org/roam/"))
+  (setq org-roam-directory (file-truename "~/Dropbox/org/roam/"))
   (setq org-roam-capture-templates '(("d" "default" plain "%?"
                                       :target
                                       (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                                                  "#+title: ${title}\n")
-                                      :unnarrowed t)
-                                     ("b" "book" plain
-                                      "* Metadata\n:PROPERTIES:\n:AUTHOR: %^{Author}\n:PUBLISHED: %^{Year}\n:ISBN: %^{ISBN}\n:END:\n\n"
-                                      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                                                         "#+title: ${title}\n#+filetags: :book:\n")
-                                      :unnarrowed t)
-                                     )))
-
-(after! lsp-ui
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-use-childframe t
-        lsp-ui-doc-show-with-cursor t
-        lsp-ui-doc-show-with-mouse nil
-        lsp-ui-doc-delay 0.2
-        lsp-ui-doc-position 'at-point)
-  (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
-
-(after! doom-ui
-  (setq! auto-dark-themes '((doom-solarized-dark-high-contrast) (doom-solarized-light)))
-  (auto-dark-mode))
+                                      :unnarrowed t))))
 
 ;; global modes
 (global-git-gutter-mode +1)
@@ -136,4 +141,6 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; keyboard shortcuts
-(global-set-key (kbd "<f1>") #'find-file)
+(global-set-key (kbd "<f1>") #'org-capture)
+(global-set-key (kbd "<f2>") #'org-roam-node-find)
+(global-set-key (kbd "<f3>") #'find-file)

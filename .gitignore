@@ -5,3 +5,4 @@ tmp/
 .config/dconf
 .config/github-*
 .config/emacs
+*~
