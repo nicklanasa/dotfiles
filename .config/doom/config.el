@@ -8,20 +8,13 @@
       display-line-numbers-type nil
       global-hl-line-modes nil
       custom-safe-themes t
+      window-divider-default-right-width 1
+      doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14)
       doom-theme 'doom-solarized-dark-high-contrast
       explicit-shell-file-name "/bin/zsh")
 
-(cond
- ((string= system-name "Mac")
-  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 18))) ; adjust font and size as needed
- (t
-  (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14))))
-
 (set-face-background 'vertical-border "#002b36")
 (set-face-foreground 'vertical-border "#62787f")
-
-(setq window-divider-default-right-width 1)
-(window-divider-mode 1)
 
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
@@ -129,6 +122,7 @@
 (global-git-gutter-mode +1)
 (global-auto-revert-mode t)
 (global-visual-line-mode t)
+(window-divider-mode 1)
 
 ;; auto saving
 (auto-save-visited-mode 1)
