@@ -1,4 +1,4 @@
-* Arch setup
+* Arch setup (omarchy)
 
 1. Install emacs-wayland
 2. Symlink hypr
@@ -14,3 +14,4 @@ ln /home/nick/dotfiles/.config/doom ~/.doom.d
 #+end_src
 
 4. Install doom emacs
+5. Add **amdgpu.dcdebugmask=0x200** to kernel params // prevents suspend from breaking
