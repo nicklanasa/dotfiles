@@ -15,3 +15,8 @@ ln /home/nick/dotfiles/.config/doom ~/.doom.d
 
 4. Install doom emacs
 5. Add **amdgpu.dcdebugmask=0x200** to kernel params // prevents suspend from breaking
+6. Reset waybar when pluggin in external monitor
+
+#+begin_src sh
+pkill waybar && hyprctl dispatch exec waybar
+#+end_src
