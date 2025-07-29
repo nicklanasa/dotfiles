@@ -38,7 +38,7 @@
         org-confirm-babel-evaluate nil
         org-refile-targets '((org-agenda-files :maxlevel . 3))
         org-agenda-include-diary t
-        org-agenda-tags-column 125
+        org-agenda-tags-column 75
         org-agenda-start-day nil
         org-deadline-warning-days 30
         org-use-speed-commands t)

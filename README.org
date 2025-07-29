@@ -20,3 +20,9 @@ ln /home/nick/dotfiles/.config/doom ~/.doom.d
 #+begin_src sh
 pkill waybar && hyprctl dispatch exec waybar
 #+end_src
+
+For managing power profiles
+
+#+begin_src sh
+powerprofilesctl set balanced # performance, power-saver, balanced
+#+end_src
