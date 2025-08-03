@@ -26,3 +26,24 @@ For managing power profiles
 #+begin_src sh
 powerprofilesctl set balanced # performance, power-saver, balanced
 #+end_src
+
+Apple superdrive, use vlc to eject
+
+#+begin_src sh
+yay -Sy sg3_utils
+sg_raw --cmdset=1 /dev/sr0 EA 00 00 00 00 00 01
+#+end_src
+
+Keyboard
+
+#+begin_src sh
+asusctl aura static -c ffffff # set keybaord color to white
+#+end_src
+
+Keyboard brightness
+
+#+begin_src sh
+# install xorg-xev
+pacman -S xorg-xev
+xev | grep keysym
+#+end_src
