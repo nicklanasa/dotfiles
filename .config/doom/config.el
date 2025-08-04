@@ -11,7 +11,7 @@
       window-divider-default-right-width 1
       doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 14)
       doom-theme 'doom-solarized-dark-high-contrast
-      explicit-shell-file-name "/bin/zsh")
+      explicit-shell-file-name "/bin/bash")
 
 (set-face-background 'vertical-border "#002b36")
 (set-face-foreground 'vertical-border "#62787f")
