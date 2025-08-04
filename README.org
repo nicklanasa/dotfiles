@@ -1,6 +1,6 @@
 * Arch setup (omarchy)
 
-1. Install emacs-wayland
+1. Install packages
 2. Symlink hypr
 
 #+begin_src sh
@@ -14,33 +14,35 @@ ln /home/nick/dotfiles/.config/doom ~/.doom.d
 #+end_src
 
 4. Install doom emacs
-5. Add **amdgpu.dcdebugmask=0x200** to kernel params // prevents suspend from breaking
-6. Reset waybar when pluggin in external monitor
+
+** Notes
+
+*** Reset waybar when pluggin in external monitor
 
 #+begin_src sh
 pkill waybar && hyprctl dispatch exec waybar
 #+end_src
 
-For managing power profiles
+*** For managing power profiles
 
 #+begin_src sh
 powerprofilesctl set balanced # performance, power-saver, balanced
 #+end_src
 
-Apple superdrive, use vlc to eject
+*** Apple superdrive, use vlc to eject
 
 #+begin_src sh
 yay -Sy sg3_utils
 sg_raw --cmdset=1 /dev/sr0 EA 00 00 00 00 00 01
 #+end_src
 
-Keyboard
+*** Keyboard
 
 #+begin_src sh
 asusctl aura static -c ffffff # set keybaord color to white
 #+end_src
 
-Keyboard brightness
+*** Keyboard brightness
 
 #+begin_src sh
 # install xorg-xev
