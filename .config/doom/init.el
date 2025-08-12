@@ -40,6 +40,9 @@
        pdf
        tree-sitter
 
+       :os
+       (:if IS-MAC macos)
+
        :lang
        data
        (emacs-lisp +lsp)
