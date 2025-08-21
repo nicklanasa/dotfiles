@@ -19,9 +19,13 @@
 ;; Vertical minibuffer
 (fido-vertical-mode 1)
 
+;; Visual line mode
+(global-visual-line-mode 1)
+(global-hl-line-mode -1)
+
 ;; Load modular config files
-(require 'appearance)
 (require 'packages)
+(require 'appearance)
 (require 'editing)
 (require 'treesitter)
 (require 'lsp)
