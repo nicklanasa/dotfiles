@@ -1,0 +1,284 @@
+#+property: header-args :tangle "init.el"
+
+* Core settings
+
+#+begin_src emacs-lisp
+  (setq native-comp-deferred-compilation t
+        native-comp-async-report-warnings-errors nil
+        ring-bell-function 'ignore
+        visible-bell t
+        completion-styles '(basic flex)
+        completion-auto-select t
+        completion-auto-help 'visible)
+#+end_src
+
+** Frame tweaks
+
+Hide toolbar and scrollbar
+
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+end_src
+
+Set transparency and font
+
+#+begin_src emacs-lisp
+  ;; Frame transparency
+  (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+  (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
+
+  ;; Font
+  (add-to-list 'default-frame-alist
+               `(font . ,(format "%s-%d" "CaskaydiaMono Nerd Font Mono" 18)))
+#+end_src
+
+Set theme
+
+#+begin_src emacs-lisp
+  (load-theme 'modus-vivendi-tinted)
+#+end_src
+
+** Auto saving
+
+This will automatically auto save visited files.
+
+#+begin_src emacs-lisp
+  (auto-save-visited-mode 1)
+#+end_src
+
+** Vertical minibuffer mode
+
+#+begin_src emacs-lisp
+  (fido-vertical-mode 1)
+#+end_src
+
+** Global modes
+
+#+begin_src emacs-lisp
+  (global-visual-line-mode 1)
+  (global-hl-line-mode -1)
+#+end_src
+
+* External Packages
+
+Setup additional archive and refresh contents
+
+#+begin_src emacs-lisp
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (package-refresh-contents)
+#+end_src
+
+** Paredit
+
+For editing lisp, auto open/close parens, etc
+
+#+begin_src emacs-lisp
+  (use-package paredit :ensure t)
+#+end_src
+
+** Org additions
+
+*** Org Roam
+
+For note taking and daily notes
+
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :ensure t
+    :config
+    (setq org-roam-directory (file-truename "~/Documents/org/roam/"))
+    (setq org-roam-capture-templates
+  	'(("d" "default" plain "%?"
+             :target
+             (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                        "#+title: ${title}\n")
+             :unnarrowed t))))
+#+end_src
+
+*** Org Chef
+
+#+begin_src emacs-lisp
+  (use-package org-chef :ensure t)
+#+end_src
+
+** Magit
+
+#+begin_src emacs-lisp
+  (use-package magit :ensure t)
+#+end_src
+
+** Treesit
+
+#+begin_src emacs-lisp
+  (use-package treesit
+    :init
+    (setq treesit-language-source-alist
+  	'((tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+            (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
+    :config
+    (dolist (lang '(tsx typescript))
+      (unless (treesit-language-available-p lang)
+        (treesit-install-language-grammar lang)))
+
+    ;; File associations
+    (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+    (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode)))
+#+end_src
+
+** LSP
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :hook ((tsx-ts-mode . lsp)
+           (typescript-ts-mode . lsp))
+    :config
+    ;; Send diagnostics to Flymake
+    (setq lsp-diagnostic-package :flymake))
+
+  ;; Flymake inline diagnostics
+  (setq flymake-display-functions '(flymake-show-diagnostics-inline))
+
+  ;; Optional: make overlays more visible
+  (custom-set-faces
+   '(flymake-error ((t (:underline (:style wave :color "Red1")))))
+   '(flymake-warning ((t (:underline (:style wave :color "Orange1"))))))
+
+  ;; LSP UI for definitions/signatures only
+  (use-package lsp-ui
+    :ensure t
+    :hook (lsp-mode . lsp-ui-mode)
+    :config
+    ;; Definitions / hover
+    (setq lsp-ui-doc-enable t
+          lsp-ui-doc-use-childframe t
+          lsp-ui-doc-position 'at-point
+          lsp-ui-doc-show-with-cursor t
+          lsp-ui-doc-show-with-mouse nil
+          lsp-ui-doc-show-diagnostics t
+          lsp-ui-sideline-enable t))
+#+end_src
+
+* Editing
+* Org Mode
+
+** Core settings
+
+#+begin_src emacs-lisp
+  (setq org-src-window-setup 'current-window
+        org-return-follows-link t
+        org-babel-load-languages '((shell . t)
+  				 (emacs-lisp . t)
+  				 (python . t))
+        org-confirm-babel-evaluate nil
+        org-refile-targets '((org-agenda-files :maxlevel . 3))
+        org-agenda-include-diary t
+        org-agenda-tags-column 75
+        org-agenda-start-day nil
+        org-deadline-warning-days 30
+        org-use-speed-commands t)
+#+end_src
+
+** Directories and agenda files
+
+#+begin_src emacs-lisp
+  (setq org-directory "~/Documents/org")
+  (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
+#+end_src
+
+** Include project files
+
+#+begin_src emacs-lisp
+  (let* ((projects-dir (expand-file-name "projects" org-directory))
+       (project-files (directory-files projects-dir 'full (rx ".org" eos))))
+  (setq org-agenda-files
+        (append org-agenda-files project-files)))
+#+end_src
+
+** Capture templates
+
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file (lambda () (expand-file-name "inbox.org" org-directory)))
+  	 "* TODO %?\n  %i\n  %a")
+  	("e" "Event" entry (file (lambda () (expand-file-name "calendar.org" org-directory)))
+  	 "* %^{Title} %^T\n")
+  	("r" "Weekly Review" entry (file (lambda () (expand-file-name "reviews.org" org-directory)))
+  	 (file (lambda () (expand-file-name "templates/weeklyreviewtemplate.org" org-directory))))
+  	("c" "Cookbook" entry (file (lambda () (expand-file-name "cookbook.org" org-directory)))
+  	 "%(org-chef-get-recipe-from-url)"
+  	 :empty-lines 1)))
+#+end_src
+
+** Agendas
+
+#+begin_src emacs-lisp
+  (setq org-agenda-custom-commands
+        '((" " "Agenda"
+  	 ((agenda "" ((org-agenda-span 'day)))
+            (todo "TODO"
+  		((org-agenda-overriding-header "Unscheduled tasks")
+  		 (org-agenda-files (list (expand-file-name "inbox.org" org-directory)
+  					 (expand-file-name "phone.org" org-directory)))
+  		 (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            (todo "TODO"
+  		((org-agenda-overriding-header "Unscheduled project tasks")
+  		 (org-agenda-files
+                    (directory-files (expand-file-name "projects" org-directory)
+                                     'full (rx ".org" eos)))
+  		 (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+  	("w" "Watch Agenda"
+  	 ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-files
+                      (directory-files (expand-file-name "watch" org-directory)
+                                       'full (rx ".org" eos)))))
+            (todo "TODO"
+  		((org-agenda-overriding-header "Unscheduled watch entries")
+  		 (org-agenda-files
+                    (directory-files (expand-file-name "watch" org-directory)
+                                     'full (rx ".org" eos)))
+  		 (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
+  	("r" "Read Agenda"
+  	 ((agenda ""
+                    ((org-agenda-span 'day)
+                     (org-agenda-files
+                      (directory-files (expand-file-name "read" org-directory)
+                                       'full (rx ".org" eos)))))
+            (todo "TODO"
+  		((org-agenda-overriding-header "Unscheduled read entries")
+  		 (org-agenda-files
+                    (directory-files (expand-file-name "read" org-directory)
+                                     'full (rx ".org" eos)))
+  		 (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
+#+end_src
+
+** Task keywords
+
+#+begin_src emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+  	(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
+#+end_src
+
+* Bindings
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+#+end_src
+
+* Hooks
+
+#+begin_src emacs-lisp
+  (dolist (hook '(emacs-lisp-mode-hook
+  		ielm-mode-hook
+  		lisp-interaction-mode-hook))
+    (add-hook hook #'paredit-mode))
+#+end_src

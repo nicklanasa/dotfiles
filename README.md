@@ -1,38 +1,3 @@
-Dotfiles Setup (Mac)
-
-1. Install Homebrew Packages
-
-``` sh
-xargs brew install < leaves
-xargs brew install --cask < casks
-sudo xcodebuild -license accept
-
-# install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-2. Symlink Config Files
-
-``` sh
-ln -s ~/dotfiles/.zshrc ~/.zshrc
-ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
-```
-
-3. Install Emacs with Doom
-
-``` sh
-brew tap d12frosted/emacs-plus
-brew reinstall emacs-plus \
-  --with-imagemagick \
-  --with-xwidgets \
-  --with-mailutils \
-  --with-c9rgreen-sonoma-icon
-
-cd ~
-ln -s /Users/nick/dotfiles/.config/doom /Users/nick/.config
-git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-~/.config/emacs/bin/doom install
-```
 
 Zsh Completions
 
