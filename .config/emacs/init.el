@@ -1,10 +1,18 @@
 (setq native-comp-deferred-compilation t
-      native-comp-async-report-warnings-errors nil
+      native-comp-async-report-warnings-errors nil	
       ring-bell-function 'ignore
       visible-bell t
+      warning-minimum-level 'error
       completion-styles '(basic flex)
-      completion-auto-select t
+      completion-auto-select t        
       completion-auto-help 'visible)
+
+;; Set Homebrew library paths for native compilation
+(setenv "LIBRARY_PATH" "/opt/homebrew/opt/libgccjit/lib/gcc/current:$LIBRARY_PATH")
+(setenv "LD_LIBRARY_PATH" "/opt/homebrew/opt/libgccjit/lib/gcc/current:$LD_LIBRARY_PATH")
+
+;; Optional: clear broken native cache after reinstall
+;; (delete-directory "~/.config/emacs/eln-cache" t)
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -17,7 +25,12 @@
 (add-to-list 'default-frame-alist
              `(font . ,(format "%s-%d" "CaskaydiaMono Nerd Font Mono" 18)))
 
-(load-theme 'modus-vivendi-tinted)
+(with-eval-after-load 'custom
+  (add-to-list 'custom-theme-load-path
+               (expand-file-name "themes/" user-emacs-directory))
+  (setq custom-safe-themes
+        (cons "solarized-osaka-light" custom-safe-themes))
+  (load-theme 'solarized-osaka-light t))
 
 (auto-save-visited-mode 1)
 
@@ -28,6 +41,22 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-refresh-contents)
+
+(use-package prettier-js
+  :hook ((typescript-mode typescript-ts-mode tsx-ts-mode js-mode js2-mode jsx-mode) . prettier-js-mode))
+
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0.2)
+  :hook (typescript-mode . company-mode))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package ledger-mode :ensure t)
 
 (use-package paredit :ensure t)
 
@@ -107,9 +136,9 @@
 (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
 
 (let* ((projects-dir (expand-file-name "projects" org-directory))
-     (project-files (directory-files projects-dir 'full (rx ".org" eos))))
-(setq org-agenda-files
-      (append org-agenda-files project-files)))
+       (project-files (directory-files projects-dir 'full (rx ".org" eos))))
+  (setq org-agenda-files
+	(append org-agenda-files project-files)))
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file (lambda () (expand-file-name "inbox.org" org-directory)))
@@ -177,3 +206,17 @@
 		ielm-mode-hook
 		lisp-interaction-mode-hook))
   (add-hook hook #'paredit-mode))
+
+(defvar ny/themes
+  '(solarized-osaka-dark solarized-osaka-light modus-operandi-tinted modus-vivendi)
+  "List of themes to choose from.")
+
+(defun ny/select-theme ()
+  "Select and load a theme from a list."
+  (interactive)
+  (let ((theme (intern (completing-read
+                        "Select theme: "
+                        (mapcar #'symbol-name ny/themes)))))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme theme t)
+    (message "Loaded theme: %s" theme)))
