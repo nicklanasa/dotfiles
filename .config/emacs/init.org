@@ -214,6 +214,10 @@ For note taking and daily notes
              :unnarrowed t))))
 #+end_src
 
+*** Org Roam UI
+#+begin_src emacs-lisp
+  (use-package org-roam-ui :ensure t)
+#+end_src
 *** Org Chef
 
 #+begin_src emacs-lisp

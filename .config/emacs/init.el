@@ -127,6 +127,8 @@
                       "#+title: ${title}\n")
            :unnarrowed t))))
 
+(use-package org-roam-ui :ensure t)
+
 (use-package org-chef :ensure t)
 
 (use-package magit :ensure t)
