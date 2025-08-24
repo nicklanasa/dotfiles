@@ -50,8 +50,8 @@
    ;; Org-mode
    `(org-todo ((t (:foreground ,red :weight bold :height 1.0))))
    `(org-level-1 ((t (:foreground ,org-heading :weight bold :height 1.0))))
-   `(org-level-2 ((t (:foreground ,blue :weight semi-bold :height 0.95))))
-   `(org-level-3 ((t (:foreground ,violet :weight normal :height 0.9))))
+   `(org-level-2 ((t (:foreground ,blue :weight semi-bold :height 1.0))))
+   `(org-level-3 ((t (:foreground ,violet :weight normal :height 1.0))))
    `(org-level-4 ((t (:foreground ,green :weight normal))))
    `(org-block ((t (:background ,org-block-bg :foreground ,fg :extend t))))
    `(org-block-begin-line ((t (:background ,org-block-bg :foreground ,cyan :slant italic :extend t))))

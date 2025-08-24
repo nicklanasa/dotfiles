@@ -3,6 +3,10 @@
       ring-bell-function 'ignore
       visible-bell t
       warning-minimum-level 'error
+      tab-width 2
+      indent-tabs-mode nil
+      js-indent-level 2
+      typescript-indent-level 2
       completion-styles '(basic flex)
       completion-auto-select t        
       completion-auto-help 'visible)
@@ -17,13 +21,15 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
 ;; Frame transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
 (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 
 ;; Font
 (add-to-list 'default-frame-alist
-             `(font . ,(format "%s-%d" "CaskaydiaMono Nerd Font Mono" 18)))
+             `(font . ,(format "%s-%d" "CaskaydiaMono Nerd Font Mono" 16)))
 
 (with-eval-after-load 'custom
   (add-to-list 'custom-theme-load-path
@@ -37,8 +43,8 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'solarized-osaka-light :no-confirm))  ;; light theme
-    ('dark (load-theme 'solarized-osaka-dark :no-confirm))))  ;; dark theme
+    ('light (load-theme 'solarized-osaka-light :no-confirm))
+    ('dark (load-theme 'solarized-osaka-dark :no-confirm))))
 
 ;; Hook into macOS appearance changes
 (add-hook 'ns-system-appearance-change-functions #'ny/apply-appearance)
@@ -52,6 +58,45 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-refresh-contents)
+
+(use-package gptel
+  :ensure t
+  :config
+  (setq gptel-use-tools t)
+  (gptel-make-ollama "Ollama"
+    :host "localhost:11434"
+    :stream t
+    :models '(gpt-oss:120b)))
+
+(gptel-make-tool
+ :name "fetch_url"
+ :function (lambda (url)
+             (let ((buffer (url-retrieve-synchronously url t t 10)))
+	       (if buffer
+                   (with-current-buffer buffer
+                     (goto-char (point-min))
+                     ;; Skip HTTP headers
+                     (re-search-forward "\n\n" nil 'move)
+                     (let ((content (buffer-substring-no-properties (point) (point-max))))
+		       (kill-buffer)
+		       content))
+                 (format "Failed to fetch URL: %s" url))))
+ :description "Fetch the content of a specified URL and return it as a string"
+ :args (list '(:name "url"
+                     :type string
+                     :description "The URL to fetch content from"))
+ :category "network")
+
+(gptel-make-tool
+ :name "insert_text"
+ :function (lambda (text)
+             (insert text)
+             (format "Inserted text at cursor:\n%s" text))
+ :description "Insert the given text at the current cursor position"
+ :args (list '(:name "text"
+                     :type string
+                     :description "Text to insert"))
+ :category "editing")
 
 (use-package prettier-js
   :hook ((typescript-mode typescript-ts-mode tsx-ts-mode js-mode js2-mode jsx-mode) . prettier-js-mode))
