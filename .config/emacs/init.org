@@ -58,6 +58,19 @@ Set theme
     (load-theme 'solarized-osaka-light t))
 #+end_src
 
+#+begin_src emacs-lisp
+  ;; Requires emacs-plus with native macOS appearance change hooks
+  (defun ny/apply-appearance (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (load-theme 'solarized-osaka-light :no-confirm))
+      ('dark (load-theme 'solarized-osaka-dark :no-confirm))))
+
+  ;; Hook into macOS appearance changes
+  (add-hook 'ns-system-appearance-change-functions #'ny/apply-appearance)
+#+end_src
+
 ** Auto saving
 
 This will automatically auto save visited files.

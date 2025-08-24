@@ -32,6 +32,17 @@
         (cons "solarized-osaka-light" custom-safe-themes))
   (load-theme 'solarized-osaka-light t))
 
+;; Requires emacs-plus with native macOS appearance change hooks
+(defun ny/apply-appearance (appearance)
+  "Load theme, taking current system APPEARANCE into consideration."
+  (mapc #'disable-theme custom-enabled-themes)
+  (pcase appearance
+    ('light (load-theme 'solarized-osaka-light :no-confirm))  ;; light theme
+    ('dark (load-theme 'solarized-osaka-dark :no-confirm))))  ;; dark theme
+
+;; Hook into macOS appearance changes
+(add-hook 'ns-system-appearance-change-functions #'ny/apply-appearance)
+
 (auto-save-visited-mode 1)
 
 (fido-vertical-mode 1)
