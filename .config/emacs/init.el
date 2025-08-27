@@ -24,8 +24,8 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 ;; Frame transparency
-(set-frame-parameter (selected-frame) 'alpha '(95 . 95))
-(add-to-list 'default-frame-alist '(alpha . (95 . 95)))
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 
 ;; Font
 (add-to-list 'default-frame-alist
@@ -58,6 +58,15 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-refresh-contents)
+
+(use-package elfeed
+  :ensure t
+  :config
+  (setq elfeed-feeds
+	'(("https://sachachua.com/blog/category/emacs-news/feed" emacs)
+	  ("https://hnrss.org/frontpage" tech)
+	  ("https://planet.emacslife.com/atom.xml" emacs)
+	  ("http://export.arxiv.org/rss/cs" research))))
 
 (use-package gptel
   :ensure t
@@ -112,24 +121,7 @@
   :config
   (exec-path-from-shell-initialize))
 
-(use-package ledger-mode :ensure t)
-
 (use-package paredit :ensure t)
-
-(use-package org-roam
-  :ensure t
-  :config
-  (setq org-roam-directory (file-truename "~/Documents/org/roam/"))
-  (setq org-roam-capture-templates
-	'(("d" "default" plain "%?"
-           :target
-           (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                      "#+title: ${title}\n")
-           :unnarrowed t))))
-
-(use-package org-roam-ui :ensure t)
-
-(use-package org-chef :ensure t)
 
 (use-package magit :ensure t)
 
@@ -176,85 +168,6 @@
         lsp-ui-doc-show-with-mouse nil
         lsp-ui-doc-show-diagnostics t
         lsp-ui-sideline-enable t))
-
-(setq org-src-window-setup 'current-window
-      org-return-follows-link t
-      org-babel-load-languages '((shell . t)
-				 (emacs-lisp . t)
-				 (python . t))
-      org-confirm-babel-evaluate nil
-      org-refile-targets '((org-agenda-files :maxlevel . 3))
-      org-agenda-include-diary t
-      org-agenda-tags-column 75
-      org-agenda-start-day nil
-      org-deadline-warning-days 30
-      org-use-speed-commands t)
-
-(setq org-directory "~/Documents/org")
-(setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
-
-(let* ((projects-dir (expand-file-name "projects" org-directory))
-       (project-files (directory-files projects-dir 'full (rx ".org" eos))))
-  (setq org-agenda-files
-	(append org-agenda-files project-files)))
-
-(setq org-capture-templates
-      '(("t" "Todo" entry (file (lambda () (expand-file-name "inbox.org" org-directory)))
-	 "* TODO %?\n  %i\n  %a")
-	("e" "Event" entry (file (lambda () (expand-file-name "calendar.org" org-directory)))
-	 "* %^{Title} %^T\n")
-	("r" "Weekly Review" entry (file (lambda () (expand-file-name "reviews.org" org-directory)))
-	 (file (lambda () (expand-file-name "templates/weeklyreviewtemplate.org" org-directory))))
-	("c" "Cookbook" entry (file (lambda () (expand-file-name "cookbook.org" org-directory)))
-	 "%(org-chef-get-recipe-from-url)"
-	 :empty-lines 1)))
-
-(setq org-agenda-custom-commands
-      '((" " "Agenda"
-	 ((agenda "" ((org-agenda-span 'day)))
-          (todo "TODO"
-		((org-agenda-overriding-header "Unscheduled tasks")
-		 (org-agenda-files (list (expand-file-name "inbox.org" org-directory)
-					 (expand-file-name "phone.org" org-directory)))
-		 (org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-          (todo "TODO"
-		((org-agenda-overriding-header "Unscheduled project tasks")
-		 (org-agenda-files
-                  (directory-files (expand-file-name "projects" org-directory)
-                                   'full (rx ".org" eos)))
-		 (org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
-	("w" "Watch Agenda"
-	 ((agenda ""
-                  ((org-agenda-span 'day)
-                   (org-agenda-files
-                    (directory-files (expand-file-name "watch" org-directory)
-                                     'full (rx ".org" eos)))))
-          (todo "TODO"
-		((org-agenda-overriding-header "Unscheduled watch entries")
-		 (org-agenda-files
-                  (directory-files (expand-file-name "watch" org-directory)
-                                   'full (rx ".org" eos)))
-		 (org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
-	("r" "Read Agenda"
-	 ((agenda ""
-                  ((org-agenda-span 'day)
-                   (org-agenda-files
-                    (directory-files (expand-file-name "read" org-directory)
-                                     'full (rx ".org" eos)))))
-          (todo "TODO"
-		((org-agenda-overriding-header "Unscheduled read entries")
-		 (org-agenda-files
-                  (directory-files (expand-file-name "read" org-directory)
-                                   'full (rx ".org" eos)))
-		 (org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'scheduled 'deadline))))))))
-
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-	(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c c") 'org-capture)
