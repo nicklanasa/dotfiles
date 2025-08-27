@@ -29,25 +29,13 @@
 
 ;; Font
 (add-to-list 'default-frame-alist
-             `(font . ,(format "%s-%d" "CaskaydiaMono Nerd Font Mono" 16)))
+             `(font . ,(format "%s-%d" "Menlo" 16)))
 
 (with-eval-after-load 'custom
   (add-to-list 'custom-theme-load-path
                (expand-file-name "themes/" user-emacs-directory))
   (setq custom-safe-themes
-        (cons "solarized-osaka-light" custom-safe-themes))
-  (load-theme 'solarized-osaka-light t))
-
-;; Requires emacs-plus with native macOS appearance change hooks
-(defun ny/apply-appearance (appearance)
-  "Load theme, taking current system APPEARANCE into consideration."
-  (mapc #'disable-theme custom-enabled-themes)
-  (pcase appearance
-    ('light (load-theme 'solarized-osaka-light :no-confirm))
-    ('dark (load-theme 'solarized-osaka-dark :no-confirm))))
-
-;; Hook into macOS appearance changes
-(add-hook 'ns-system-appearance-change-functions #'ny/apply-appearance)
+        (cons "solarized-osaka-light" custom-safe-themes)))
 
 (auto-save-visited-mode 1)
 
@@ -58,6 +46,16 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-refresh-contents)
+
+(use-package auto-dark
+  :ensure t
+  :init
+  ;; Configure themes
+  (setq custom-safe-themes t)
+  (setq auto-dark-themes '((doom-solarized-dark-high-contrast) (doom-solarized-light)))
+  (auto-dark-mode))
+
+(use-package doom-themes :ensure t)
 
 (use-package elfeed
   :ensure t
