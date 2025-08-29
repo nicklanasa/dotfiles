@@ -8,7 +8,7 @@
       display-line-numbers-type nil
       global-hl-line-modes nil
       custom-safe-themes t
-      doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 16)
+      doom-font (font-spec :family "Menlo" :size 16)
       doom-theme 'doom-solarized-dark-high-contrast
       explicit-shell-file-name "/bin/zsh")
 
