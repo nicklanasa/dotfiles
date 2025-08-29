@@ -7,13 +7,10 @@ brew tap d12frosted/emacs-plus
 brew install emacs-plus  --with-c9rgreen-sonoma-icon
 xargs brew install < leaves
 xargs brew install --cask < casks
-sudo xcodebuild -license accept
     
 # install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
-
-`
 
 ## Symlink config files
 
