@@ -14,6 +14,9 @@
        workspaces
        zen
 
+       :term
+       vterm
+
        :editor
        file-templates
        fold

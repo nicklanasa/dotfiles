@@ -4,3 +4,5 @@ tmux
 vim
 wget
 watchman
+libtool
+cmake

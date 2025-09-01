@@ -18,6 +18,10 @@
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
 
+(after! copilot
+  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
+
 (after! lsp-ui
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-use-childframe t
