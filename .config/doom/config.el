@@ -23,12 +23,9 @@
         lsp-ui-doc-use-childframe t
         lsp-ui-doc-show-with-cursor t
         lsp-ui-doc-show-with-mouse nil
-        lsp-ui-sideline-show-diagnostics t
-        lsp-diagnostic-mode 1
         lsp-ui-doc-delay 0.2
-        lsp-ui-doc-position 'top)
-  (add-hook 'lsp-mode-hook 'lsp-diagnostic-mode)
-  (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode ))
+        lsp-ui-doc-position 'at-point)
+  (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
 
 ;; org
 (after! org

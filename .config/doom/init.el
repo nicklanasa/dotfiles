@@ -28,7 +28,7 @@
        vc
 
        :checkers
-       (syntax +childframe +flymake +icons)
+       (syntax +childframe +flycheck +icons)
 
        :tools
        (debugger +lsp)
