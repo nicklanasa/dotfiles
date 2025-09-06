@@ -1,38 +1,21 @@
-# System setup
+* Setup
 
-## Install emacs for OS X and setup packages
-
-https://emacsformacosx.com
-
-``` sh
-ln -s ~/dotfiles/.config/doom ~/.doom.d
-git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
-~/.emacs.d/bin/doom install 
-
+#+begin_src sh
+brew tap d12frosted/emacs-plus
+brew install emacs-plus  --with-c9rgreen-sonoma-icon
 xargs brew install < leaves
 xargs brew install --cask < casks
-    
+
+ln -s ~/dotfiles/.config/doom ~/.doom.d
+git clone https://github.com/hlissner/doom-emacs ~/.config/emacs
+~/.config/emacs/bin/doom install
+
 # install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
 
-## Symlink config files
-
-``` sh
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
-```
-
-
-## Setup android studio
-
-``` sh
-brew info --cask zulu@17
-
-# Navigate to the folder
-open /opt/homebrew/Caskroom/zulu@17/<version number> # or /usr/local/Caskroom/zulu@17/<version number>
-```
-
+#+end_src
 
 After opening Finder, double click the Double-Click to Install Azul Zulu JDK 17.pkg package to install the JDK.
 

@@ -121,7 +121,6 @@
                                                  "#+title: ${title}\n")
                                       :unnarrowed t))))
 
-
 ;; global modes
 (global-git-gutter-mode +1)
 (global-auto-revert-mode t)
@@ -136,5 +135,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; keyboard shortcuts
-(global-set-key (kbd "<f1>") #'find-file)
-
+(global-set-key (kbd "<f1>") #'org-capture)
+(global-set-key (kbd "<f2>") #'org-roam-dailies-goto-today)
+(global-set-key (kbd "<f3>") #'org-agenda)
+(global-set-key (kbd "<f4>") #'org-roam-node-find)
