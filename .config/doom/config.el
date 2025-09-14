@@ -12,23 +12,27 @@
       doom-theme 'doom-solarized-dark-high-contrast
       explicit-shell-file-name "/bin/zsh")
 
+;; frame
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
 (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 
+;; docs
 (after! dash-docs
   (set-docsets! 'ts-mode :add "React" "TypeScript"))
 
+;; ai/copilot
 (after! copilot
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion))
 
+;; lsp
 (after! lsp-ui
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-use-childframe t
         lsp-ui-doc-show-with-cursor t
         lsp-ui-doc-show-with-mouse nil
         lsp-ui-doc-delay 0.2
-        lsp-ui-doc-position 'at-point)
+        lsp-ui-doc-position 'top)
   (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
 
 ;; org
@@ -49,12 +53,6 @@
   (setq org-directory "~/Documents/org")
   (setq org-agenda-files (directory-files org-directory 'full (rx ".org" eos)))
 
-  ;; then add project files
-  (let* ((projects-dir (expand-file-name "projects" org-directory))
-         (project-files (directory-files projects-dir 'full (rx ".org" eos))))
-    (setq org-agenda-files
-          (append org-agenda-files project-files)))
-
   (setq org-capture-templates
         '(("t" "Todo" entry (file (lambda () (expand-file-name "inbox.org" org-directory)))
            "* TODO %?\n  %i\n  %a")
@@ -72,14 +70,12 @@
                     ((org-agenda-span 'day)))
             (todo "TODO"
                   ((org-agenda-overriding-header "Unscheduled tasks")
-                   (org-agenda-files (list (expand-file-name "inbox.org" org-directory) (expand-file-name "phone.org" org-directory) (expand-file-name "calendar.org" org-directory) ))
+                   (org-agenda-files (list (expand-file-name "inbox.org" org-directory) (expand-file-name "phone.org" org-directory) (expand-file-name "calendar.org" org-directory)))
                    (org-agenda-skip-function
                     '(org-agenda-skip-entry-if 'scheduled 'deadline))))
             (todo "TODO"
                   ((org-agenda-overriding-header "Unscheduled project tasks")
-                   (org-agenda-files
-                    (directory-files (expand-file-name "projects" org-directory)
-                                     'full (rx ".org" eos)))
+                   (org-agenda-files (list (expand-file-name "rewards.org" org-directory)))
                    (org-agenda-skip-function
                     '(org-agenda-skip-entry-if 'scheduled 'deadline))))))
           ("w" "Watch Agenda"
@@ -139,3 +135,6 @@
 (global-set-key (kbd "<f2>") #'org-roam-dailies-goto-today)
 (global-set-key (kbd "<f3>") #'org-agenda)
 (global-set-key (kbd "<f4>") #'org-roam-node-find)
+
+;; hook
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
