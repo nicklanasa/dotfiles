@@ -15,6 +15,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.tmux.conf ~/.tmux.conf
+
+# claude code
+npm i -g @anthropic-ai/claude-code
 #+end_src
 
 After opening Finder, double click the Double-Click to Install Azul Zulu JDK 17.pkg package to install the JDK.

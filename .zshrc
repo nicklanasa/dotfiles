@@ -19,3 +19,4 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH="$PATH:/Users/nick/.lmstudio/bin"
 # End of LM Studio CLI section
 
+eval "$(rbenv init - zsh)"

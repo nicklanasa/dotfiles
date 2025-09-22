@@ -12,3 +12,6 @@
   :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
 
 (package! org-chef)
+(package! org-roam-ui)
+
+(package! auto-dark)
