@@ -57,7 +57,6 @@
        ledger
        (web +lsp)
        (yaml +lsp)
-       (org +roam2)
 
        :config
        (default +bindings +smartparens))
