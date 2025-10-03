@@ -65,11 +65,5 @@
 ;; max frame
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; keyboard shortcuts
-(global-set-key (kbd "<f1>") #'org-capture)
-(global-set-key (kbd "<f2>") #'org-roam-dailies-goto-today)
-(global-set-key (kbd "<f3>") #'org-agenda)
-(global-set-key (kbd "<f4>") #'org-roam-node-find)
-
 ;; hook
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
