@@ -398,13 +398,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-	 '("e417a25a2fbd1a6b09139245a10e21d670c6669868266bc4bbf283efa3e2d222"
-		 default))
+   '("e417a25a2fbd1a6b09139245a10e21d670c6669868266bc4bbf283efa3e2d222"
+     default))
  '(package-selected-packages
-	 '(corfu diff-hl dired-subtree ledger-mode lsp-sourcekit lsp-ui magit
-					 marginalia multi-vterm nerd-icons-completion
-					 nerd-icons-corfu nerd-icons-dired orderless org-roam-ui
-					 paredit swift-mode trashed vertico yasnippet)))
+   '(corfu diff-hl dired-subtree ledger-mode lsp-sourcekit lsp-ui magit
+	   marginalia multi-vterm nerd-icons-completion
+	   nerd-icons-corfu nerd-icons-dired orderless org-roam-ui
+	   paredit swift-mode trashed vertico yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
