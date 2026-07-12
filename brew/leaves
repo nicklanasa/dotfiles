@@ -1,12 +1,11 @@
 node
+cmake
+cocoapods
+libtool
 tmux
 wget
 curl
 ffmpeg
 yt-dlp
 codex
-claude-code
 opencode
-pi-coding-agent
-markdown
-pandoc
