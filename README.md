@@ -1,4 +1,4 @@
-# Nick LanSA's Dotfiles
+# Nick Lanasa's Dotfiles
 
 ## Install
 
