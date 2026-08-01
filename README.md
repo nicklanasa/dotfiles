@@ -3,6 +3,7 @@
 ## Install
 
 ```sh
+npm install -g typescript typescript-language-server
 xargs brew install --cask < casks
 xargs brew install < leaves
 ```

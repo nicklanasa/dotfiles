@@ -5,9 +5,7 @@ libtool
 tmux
 wget
 curl
-ffmpeg
-yt-dlp
 codex
 opencode
 pandoc
-pngpaste
+corepack
