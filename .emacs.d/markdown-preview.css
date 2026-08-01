@@ -1,0 +1,219 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f7f8fa;
+  --fg: #20242a;
+  --muted: #5c6672;
+  --border: #d7dde5;
+  --border-strong: #b8c1cc;
+  --surface: #ffffff;
+  --surface-alt: #f0f3f6;
+  --row-alt: #fafbfc;
+  --accent: #2563eb;
+  --code-bg: #eef2f7;
+  --shadow: 0 18px 45px rgb(15 23 42 / 10%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111318;
+    --fg: #e7ebf0;
+    --muted: #a5adba;
+    --border: #303742;
+    --border-strong: #475160;
+    --surface: #171b22;
+    --surface-alt: #202630;
+    --row-alt: #1b2028;
+    --accent: #7aa2ff;
+    --code-bg: #222a35;
+    --shadow: 0 18px 45px rgb(0 0 0 / 30%);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+body {
+  max-width: 920px;
+  margin: 40px auto;
+  padding: 44px 52px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 1.8em 0 0.65em;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+h1 {
+  margin-top: 0;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--border);
+  font-size: 2.15rem;
+}
+
+h2 {
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.55rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p,
+ul,
+ol,
+blockquote,
+pre,
+table {
+  margin: 0 0 1.15em;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+blockquote {
+  padding: 0.1em 1.1em;
+  color: var(--muted);
+  border-left: 4px solid var(--border-strong);
+}
+
+ul,
+ol {
+  padding-left: 1.45em;
+}
+
+li + li {
+  margin-top: 0.25em;
+}
+
+table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+thead {
+  background: var(--surface-alt);
+}
+
+tr {
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--row-alt);
+}
+
+th,
+td {
+  padding: 0.65em 0.85em;
+  border-right: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+th:last-child,
+td:last-child {
+  border-right: 0;
+}
+
+th {
+  font-weight: 650;
+}
+
+code,
+kbd,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+code,
+kbd {
+  padding: 0.12em 0.32em;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.9em;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1em 1.1em;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+pre code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: 0.92em;
+}
+
+hr {
+  height: 1px;
+  margin: 2em 0;
+  background: var(--border);
+  border: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.mermaid {
+  margin: 1.35em 0;
+  padding: 1.1em;
+  overflow-x: auto;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 720px) {
+  body {
+    margin: 0;
+    padding: 26px 20px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
