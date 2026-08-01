@@ -233,9 +233,6 @@
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 
-(add-hook 'typescript-ts-mode-hook #'lsp-deferred)
-(add-hook 'tsx-ts-mode-hook #'lsp-deferred)
-
 (add-to-list 'treesit-language-source-alist
              '(python "https://github.com/tree-sitter/tree-sitter-python"))
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
@@ -260,14 +257,25 @@
         flymake-mode-line-lighter " Fly"))
 
 (use-package lsp-mode
- :ensure t
- :init
- (setq lsp-diagnostics-provider :flymake)
- (setq lsp-completion-provider :none)
- :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-        ;; if you want which-key integration
-        (lsp-mode . lsp-enable-which-key-integration))
- :commands (lsp lsp-deferred))
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook
+  ((typescript-ts-mode . lsp-deferred)
+   (tsx-ts-mode . lsp-deferred)
+   (lsp-mode . lsp-enable-which-key-integration))
+  :init
+  (setq lsp-diagnostics-provider :flymake
+        lsp-completion-provider :none
+        lsp-clients-typescript-prefer-use-project-ts-server t)
+  :config
+  ;; TypeScript 7 removed tsserver, which typescript-language-server 5.x
+  ;; still requires.  Keep lsp-mode's managed fallback on the compatible line.
+  (with-eval-after-load 'lsp-javascript
+    (lsp-dependency 'typescript
+                    '(:system "tsserver")
+                    '(:npm :package "typescript"
+                           :path "tsserver"
+                           :version "6.0.3"))))
 
 (use-package lsp-ui
   :ensure t
