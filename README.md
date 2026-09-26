@@ -52,6 +52,14 @@ cd ~/dotfiles/brew
 xargs brew install --cask < casks
 ```
 
+## Opencode
+
+```shell
+mkdir ~/.config/opencode
+ln -s opencode.json ~/.config/opencode/
+ln -s skills ~/.config/opencode/
+```
+
 ## Tmux
 
 ``` shell
