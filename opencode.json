@@ -15,8 +15,11 @@
       "models": {
         "GLM-5.3-Flash-Q2": {
           "name": "GLM-5.3 Flash Q2",
+          "tool_call": true,
+          "temperature": true,
+          "attachment": true,
           "limit": {
-            "context": 256000,
+            "context": 128000,
             "output": 16384
           },
           "modalities": {
@@ -32,8 +35,11 @@
         "deepseek-v4-flash": {
           "id": "deepseek-v4-flash",
           "name": "DeepSeek V4 Flash Q2/Q4",
+          "tool_call": true,
+          "reasoning": true,
+          "temperature": true,
           "limit": {
-            "context": 256000,
+            "context": 128000,
             "output": 16384
           },
           "modalities": {
@@ -48,8 +54,12 @@
         "deepseek-v4-flash-vision": {
           "id": "deepseek-v4-flash-vision",
           "name": "DeepSeek V4 Flash Vision Q2/Q4",
+          "tool_call": true,
+          "reasoning": true,
+          "temperature": true,
+          "attachment": true,
           "limit": {
-            "context": 256000,
+            "context": 128000,
             "output": 16384
           },
           "modalities": {
@@ -65,8 +75,12 @@
         "deepseek-v4.1-flash": {
           "id": "deepseek-v4.1-flash",
           "name": "DeepSeek V4.1 Flash Q2 (SSD)",
+          "tool_call": true,
+          "reasoning": true,
+          "temperature": true,
+          "attachment": true,
           "limit": {
-            "context": 256000,
+            "context": 128000,
             "output": 16384
           },
           "modalities": {
@@ -82,8 +96,11 @@
         "qwen3.8-flash-next": {
           "id": "qwen3.8-flash-next",
           "name": "Qwen3.8 Flash Next Q4",
+          "tool_call": true,
+          "temperature": true,
+          "attachment": true,
           "limit": {
-            "context": 256000,
+            "context": 128000,
             "output": 16384
           },
           "modalities": {
@@ -108,6 +125,9 @@
         "openai/gpt-oss-20b": {
           "name": "GPT OSS 20b",
           "tool_call": true,
+          "reasoning": true,
+          "temperature": true,
+          "attachment": true,
           "limit": {
             "context": 256000,
             "output": 16384
@@ -124,6 +144,9 @@
         "openai/gpt-oss-120b": {
           "name": "GPT OSS 120b",
           "tool_call": true,
+          "reasoning": true,
+          "temperature": true,
+          "attachment": true,
           "limit": {
             "context": 256000,
             "output": 16384
