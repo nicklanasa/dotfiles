@@ -5,9 +5,16 @@ description: Look at the current uncommitted changes and commit them with a mess
 
 ## Workflow
 
+Run autonomously without asking the user to confirm each step:
+
 1. Look at the current uncommitted changes with `git status` and `git diff`.
-2. Ask which files to stage, or stage all with `git add -A`.
+2. Stage all with `git add -A` (only stage files related to the request if the user specified which ones).
 3. Review the staged diff with `git diff --cached`.
-4. Generate a commit message for me to review.
-5. If I approve, commit with `git commit -m "<message>"`. If not, adjust and repeat.
-6. Ask to push the changes with `git push origin <branch>`.
+4. Generate a commit message and commit with `git commit -m "<message>"`.
+5. Push to the remote with `git push origin <branch>`.
+6. Report the commit hash and push result to the user.
+
+Notes:
+- If the user explicitly asks to only commit (not push), skip the push step.
+- If there are no changes, tell the user there's nothing to commit and stop.
+- Never amend or force-push.
